@@ -1,0 +1,27 @@
+{
+  "name": "assignmnet2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js",
+    "dev": "nodemon index.js",
+    "prod": "nodemon index.js",
+    "build": "webpack --config webpack.config.js"
+  },
+  "author": "mikiyas wendmneh",
+  "license": "ISC",
+  "devDependencies": {
+    "dotenv": "^16.4.1",
+    "express": "^4.18.2",
+    "joi": "^17.12.0",
+    "mongoose": "^8.1.1",
+    "nodemon": "^3.0.3"
+  },
+  "dependencies": {
+    "http-status": "^1.7.3",
+    "morgan": "^1.10.0",
+    "winston": "^3.11.0"
+  }
+}
