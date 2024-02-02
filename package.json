@@ -20,6 +20,8 @@
     "nodemon": "^3.0.3"
   },
   "dependencies": {
+    "@meanie/mongoose-to-json": "^2.6.0",
+    "bcrypt": "^5.1.1",
     "dayjs": "^1.11.10",
     "http-status": "^1.7.3",
     "jsonwebtoken": "^9.0.2",

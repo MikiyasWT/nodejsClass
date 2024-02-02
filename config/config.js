@@ -16,6 +16,7 @@ module.exports = {
   environmnet:envVars.NODE_ENV,
   jwt : {
     secret:envVars.JWT_SECRET,
-    accessExpirationMinutes:envVars.JJWT_EXPIRES_MINUTES
+    accessExpirationMinutes:envVars.JWT_EXPIRES_MINUTES,
+    refreshExpirationDays:envVars.JWT_REFRESH_EXPIRES_DAYS
   }
 };

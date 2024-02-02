@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
 const validator = require('validator')
+const bcrypt = require('bcrypt');
+const toJson = require('@meanie/mongoose-to-json');
+
 
 const userSchema = mongoose.Schema({
   name:{
@@ -23,11 +26,13 @@ const userSchema = mongoose.Schema({
     trim: true,
     minlength: 8,
     required: true,
+    private:true, 
     validate(value) {
         if(!validator.isStrongPassword(value)) {
             throw new Error('pAssword should contain atleast 1 uppercase & 1 lowercase, number and a special character')
         }
     }
+   
   },
 }
 ,
@@ -41,6 +46,23 @@ userSchema.statics.isEmailTaken = async function (email) {
     // so to get the correct value as a boolean we used !!user
     return !!user;
   };
+
+
+userSchema.pre('save',async function (next){
+      const user = this
+        if(user.isModified('password')){
+             user.password = await bcrypt.hash(user.password, 8)
+        }
+
+        next();
+  });  
+
+userSchema.methods.isPasswordMatch = async function(password) {
+  const user = this
+  return await bcrypt.compare(password, user.password)
+}  
+
+userSchema.plugin(toJson)
 
 const User = mongoose.model("User", userSchema);
 
