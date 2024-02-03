@@ -12,7 +12,7 @@ const register = catchAsyncErrors(async (req, res) => {
 
 const login = catchAsyncErrors(async (req, res) => {
   const { email, password } = req.body;
-  const user = await authService.login(email, password);
+  const user = await authService.login(email, password, req.connection.remoteAddress);
   const token = await tokenService.generateAuthTokens(user.id);
   res.status(httpStatus.OK).send({ success: true, user, token });
 });
