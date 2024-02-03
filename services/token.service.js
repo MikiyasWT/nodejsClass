@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const dayjs = require("dayjs");
 const config = require("../config/config");
 const { tokenTypes } = require("./../config/token");
+const {Token} = require('../models')
 
 const generateToken = (userId, expires, type, secret = config.jwt.secret) => {
   const payload = {
@@ -25,6 +26,7 @@ const saveToken = async (token, userId, expires, type, blacklisted = false) => {
   return tokenDoc;
 };
 
+
 const verifyToken = async (token, type) => {
   const payload = jwt.verify(token, config.jwt.secret);
   const tokenDoc = await Token.findOne({
@@ -38,6 +40,8 @@ const verifyToken = async (token, type) => {
   }
   return tokenDoc;
 };
+
+
 
 const generateAuthTokens = async (userId) => {
   const accessTokenExpires = dayjs().add(config.jwt.accessExpirationMinutes,'minutes');

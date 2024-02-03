@@ -6,6 +6,12 @@ const validateAuthSchema = {
   }),
 };
 
+const refreshTokenSchema = {
+  body: Joi.object().keys({
+    refreshToken: Joi.string().required(),
+  }),
+};
+
 module.exports = {
-  validateAuthSchema,
+  validateAuthSchema, refreshTokenSchema
 };

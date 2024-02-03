@@ -14,7 +14,11 @@ const getUserByEmail = async (email) => {
     return await User.findOne({ email})
 }
 
+const getUserById = async (id) => {
+    return await User.findById(id);
+}
+
 
 module.exports = {
-    registerUser, getUserByEmail
+    registerUser, getUserByEmail, getUserById
 };

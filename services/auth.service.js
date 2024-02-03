@@ -1,7 +1,8 @@
-const { User } = require('../models');
+const { User, Token } = require('../models');
 const ApiError = require('../utils/ApiError.JS');
 const httpStatus = require('http-status');
-const { userService } = require('./index')
+const { userService, tokenService } = require('./index');
+const { tokenTypes } = require('../config/token');
 
 
 const login = async (email, password) => {
@@ -13,4 +14,25 @@ const login = async (email, password) => {
   };
 
 
-module.exports = { login }
+  const refreshAuthToken = async (refreshToken) => {
+    try {
+      const refreshTokenDoc = await tokenService.verifyToken(
+        refreshToken,
+        tokenTypes.REFRESH);
+
+        
+      const user = await userService.getUserById(refreshTokenDoc.user);
+      
+      if (!user) {
+          throw new Error();
+      }
+      await Token.findByIdAndDelete(refreshTokenDoc.id);
+      return tokenService.generateAuthTokens(user.id);
+   
+    } catch (error) {
+      throw new ApiError(httpStatus.UNAUTHORIZED, 'Please authenticate');
+    }
+  };  
+
+
+module.exports = { login, refreshAuthToken }
