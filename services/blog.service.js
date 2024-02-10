@@ -1,12 +1,12 @@
 const { Blog } = require('./../models');
 
 
-const createBlog = async (body) => {
-  await Blog.create(body);
+const createBlog = async (body,userId) => {
+  await Blog.create({...body, createdBy: userId});
 };
 
-const getBlogs = async () => {
-  const blogs = await Blog.find({});
+const getBlogs = async (userId) => {
+  const blogs = await Blog.find({ createdBy: userId });
   return blogs;
 };
 

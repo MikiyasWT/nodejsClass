@@ -23,5 +23,14 @@ module.exports = {
     maxAttemptsPerDay: envVars.MAX_ATTEMPTS_PER_DAY,
     maxAttemptsByIpUsername:envVars.MAX_ATTEMPTS_BY_IP_USER_NAME,
     maxAttemptsPerEmail:envVars.MAX_ATTEMPTS_PER_EMAIL
+  },
+  contentSecurityPolicyOptions:{
+    directives: {
+      defaultSrc:["'self'"],
+      styleSrc:["'self'", "'unsafe-inline'"],
+      scriptSrc:["'self'", "'unsafe-inline'"],
+      fontSrc:["'self'", "'fonts.gstatic.com'"],
+    },
+    reportOnly: true
   }
 };
