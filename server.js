@@ -4,10 +4,12 @@ const blogRouter = require('./routes/blog.route');
 const authRouter = require('./routes/auth.route');
 const { errorHandler, errorConverter } = require('./middlewares/error');
 const ApiError = require('./utils/ApiError.JS');
-const morgan = require('./config/morgan')
+const morgan = require('./config/morgan');
 const httpStatus = require('http-status');
-const passport = require('passport')
-const {jwtStrategy} = require('./config/passport')
+const passport = require('passport');
+const {jwtStrategy} = require('./config/passport');
+const { xss } = require('express-xss-sanitizer')
+
 
 app.use(morgan.errorHandler);
 app.use(morgan.successHandler);
@@ -19,6 +21,8 @@ passport.use('jwt', jwtStrategy);
 
 
 app.use(express.json());
+// this must be used before the routes
+app.use(xss())
 app.use(blogRouter);
 app.use(authRouter);
 
@@ -30,3 +34,5 @@ app.use(errorConverter);
 app.use(errorHandler);
 
 module.exports = app;
+
+
