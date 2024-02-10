@@ -3,39 +3,48 @@ const ApiError = require("../utils/ApiError.JS");
 const httpStatus = require("http-status");
 const { userService, tokenService } = require("./index");
 const { tokenTypes } = require("../config/token");
-
 const { RateLimiterMongo } = require("rate-limiter-flexible");
 const mongoose = require("mongoose");
-const maxAttemptsPerDay = 100;
-const maxAttemptsByIpUserName = 10;
-const maxAttemptsPerEmail = 10;
+const config = require('../config/config')
+// const maxAttemptsPerDay = 100;
+// const maxAttemptsByIpUserName = 10;
+// const maxAttemptsPerEmail = 10;
 
 const login = async (email, password, ipAddr) => {
-  const rateLimiterOptioins = {
-    storeClient: mongoose.connection,
-    dbName: 'udemyclass',
-    blockDuration: 60 * 60 * 24,
-  };
-  const emailIpBruteLimiter = new RateLimiterMongo({
-    ...rateLimiterOptioins,
-    points: maxAttemptsByIpUserName,
-    duration: 60 * 10,
-  });
+//blockDuration: 60seconds * 60 * 24,   3600seconds multipled by 24 which is 24 hours
+const rateLimiterOptioins = {
+  storeClient: mongoose.connection,
+  dbName: 'udemyclass',
+  blockDuration: 60 * 60 * 24,
+};
 
-  const slowerBruteLimiter = new RateLimiterMongo({
-    ...rateLimiterOptioins,
-    points: maxAttemptsPerDay,
-    duration: 60 * 60 * 24,
-  });
+//only allwed maxAttemptsByIpUsername value of tries in 60sec*10 which is 10 minute otherwise will be blocked for 
+const emailIpBruteLimiter = new RateLimiterMongo({
+  ...rateLimiterOptioins,
+  points:config.rateLimiter.maxAttemptsByIpUsername,
+  duration: 60 * 10,
+});
 
-  const emailBruteLimiter = new RateLimiterMongo({
-    ...rateLimiterOptioins,
-    points: maxAttemptsPerEmail,
-    duration: 60 * 60 * 24,
-  });
+//in a case where an attacker trying to to rbute by making only 9 tries a day forever
+// we can catch him using this instance
+const slowerBruteLimiter = new RateLimiterMongo({
+  ...rateLimiterOptioins,
+  points:config.rateLimiter.maxAttemptsPerDay,
+  duration: 60 * 60 * 24,
+});
+
+
+//in a case where mltiple ip requests are to signin using a similar email , 1 email address multiple ip address
+const emailBruteLimiter = new RateLimiterMongo({
+  ...rateLimiterOptioins,
+  points:config.rateLimiter.maxAttemptsPerEmail,
+  duration: 60 * 60 * 24,
+});
+
   const promises = [slowerBruteLimiter.consume(ipAddr)];
   const user = await userService.getUserByEmail(email);
   if (!user || !(await user.isPasswordMatch(password))) {
+    //for every unsuccessful request we record the email, ipaddress we increment it
     user &&
       promises.push([
         emailIpBruteLimiter.consume(`${email}_${ipAddr}`),
