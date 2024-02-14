@@ -1,17 +1,18 @@
 {
+  "main":"src/index.js",
   "name": "assignmnet2",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js",
+    "start": "nodemon src/index.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prettier": "prettier --check **/*.js",
     "prettier:fix": "prettier --write **/*.js",
-    "dev": "nodemon index.js",
-    "prod": "nodemon index.js",
+    "dev": "nodemon src/index.js",
+    "prod": "nodemon src/index.js",
     "build": "webpack --config webpack.config.js"
   },
   "author": "mikiyas wendmneh",
