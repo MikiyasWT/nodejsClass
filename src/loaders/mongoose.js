@@ -1,11 +1,11 @@
+/* eslint-disable no-console */
 const mongoose = require('mongoose');
-const config = require('./config');
+const config = require('../config/config');
+const logger = require('../config/logger');
 
-const logger = require('./logger');
-
-const connectDatabase = () => {
+module.exports = async () => {
   try {
-    mongoose.connect(config.dbConnection).then((con) => {
+    const connection = mongoose.connect(config.dbConnection).then((con) => {
       logger.info(`MongoDB Database connected`);
       // eslint-disable-next-line no-console
       console.log(
@@ -13,13 +13,11 @@ const connectDatabase = () => {
         `MongoDB Database connected: ${con.connection.host}:${con.connection.port}`,
       );
     });
+
+    return connection;
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Unable to connect to database');
     logger.error(`unable to connect to database`);
-
-    // Handle the error or display a message to the user
   }
 };
-
-module.exports = connectDatabase;

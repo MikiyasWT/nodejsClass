@@ -23,7 +23,7 @@ const logger = createLogger({
   ),
   transports: [
     new transports.Console(),
-    new transports.File({ filename: './app.log' }),
+    new transports.File({ filename: './src/logs/access.log' }),
   ],
 });
 module.exports = logger;
