@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const blogSchema = mongoose.Schema({
   title: {
     type: String,
@@ -9,10 +10,10 @@ const blogSchema = mongoose.Schema({
     required: true,
   },
   createdBy: {
-    type:mongoose.SchemaTypes.ObjectId,
-    ref:'User',
-    required:true
-  }
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: 'User',
+    required: true,
+  },
 });
 
 const Blog = mongoose.model('Blog', blogSchema);

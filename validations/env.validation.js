@@ -1,7 +1,6 @@
 const joi = require('joi');
 
 function validateEnvironment(env) {
-
   const envVarSchema = joi
     .object({
       DB_CONNECTION: joi.string().required(),
@@ -14,6 +13,5 @@ function validateEnvironment(env) {
 }
 
 module.exports = {
-    validateEnvironment
-  };
-
+  validateEnvironment,
+};

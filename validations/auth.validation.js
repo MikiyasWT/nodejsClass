@@ -1,4 +1,5 @@
 const Joi = require('joi');
+
 const validateAuthSchema = {
   body: Joi.object().keys({
     email: Joi.string().email().required(),
@@ -13,5 +14,6 @@ const refreshTokenSchema = {
 };
 
 module.exports = {
-  validateAuthSchema, refreshTokenSchema
+  validateAuthSchema,
+  refreshTokenSchema,
 };

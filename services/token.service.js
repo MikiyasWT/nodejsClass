@@ -1,8 +1,8 @@
-const jwt = require("jsonwebtoken");
-const dayjs = require("dayjs");
-const config = require("../config/config");
-const { tokenTypes } = require("./../config/token");
-const {Token} = require('../models')
+const jwt = require('jsonwebtoken');
+const dayjs = require('dayjs');
+const config = require('../config/config');
+const { tokenTypes } = require('../config/token');
+const { Token } = require('../models');
 
 const generateToken = (userId, expires, type, secret = config.jwt.secret) => {
   const payload = {
@@ -26,7 +26,6 @@ const saveToken = async (token, userId, expires, type, blacklisted = false) => {
   return tokenDoc;
 };
 
-
 const verifyToken = async (token, type) => {
   const payload = jwt.verify(token, config.jwt.secret);
   const tokenDoc = await Token.findOne({
@@ -41,42 +40,45 @@ const verifyToken = async (token, type) => {
   return tokenDoc;
 };
 
-
-
 const generateAuthTokens = async (userId) => {
-  const accessTokenExpires = dayjs().add(config.jwt.accessExpirationMinutes,'minutes');
-  const refreshTokenExpires = dayjs().add(config.jwt.refreshExpirationDays, 'days');
+  const accessTokenExpires = dayjs().add(
+    config.jwt.accessExpirationMinutes,
+    'minutes',
+  );
+  const refreshTokenExpires = dayjs().add(
+    config.jwt.refreshExpirationDays,
+    'days',
+  );
 
   const accessToken = generateToken(
     userId,
     accessTokenExpires,
-    tokenTypes.ACCESS
+    tokenTypes.ACCESS,
   );
 
-  
   const refreshToken = generateToken(
     userId,
     refreshTokenExpires,
-    tokenTypes.REFRESH
+    tokenTypes.REFRESH,
   );
 
   await saveToken(
     refreshToken,
     userId,
     refreshTokenExpires,
-    tokenTypes.REFRESH
+    tokenTypes.REFRESH,
   );
 
   return {
     access: {
       token: accessToken,
-      expires:accessTokenExpires.toDate()
+      expires: accessTokenExpires.toDate(),
     },
     refresh: {
       token: refreshToken,
-      expires:refreshTokenExpires.toDate()
-    }
-  }
+      expires: refreshTokenExpires.toDate(),
+    },
+  };
 };
 
 module.exports = {

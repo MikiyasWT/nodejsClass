@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-const config = require('./../config/config');
-const ApiError = require('../utils/ApiError.JS');
 const httpStatus = require('http-status');
+const config = require('../config/config');
+const ApiError = require('../utils/ApiError.JS');
 const logger = require('../config/logger');
 
 const errorConverter = (err, req, res, next) => {
@@ -17,7 +17,7 @@ const errorConverter = (err, req, res, next) => {
   next(error);
 };
 
-const errorHandler = (err, req, res, next) => {
+const errorHandler = (err, req, res) => {
   let { statusCode, message } = err;
   if (config.environmnet === 'PRODUCTION' && !err.isOperational) {
     statusCode = httpStatus.INTERNAL_SERVER_ERROR;
