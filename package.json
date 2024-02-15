@@ -1,9 +1,8 @@
 {
-  "main":"src/index.js",
-  "name": "assignmnet2",
+  "main": "index.js",
+  "name": "ucs2 project",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon src/index.js",
@@ -43,6 +42,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.1.2",
     "morgan": "^1.10.0",
+    "nodemailer": "^6.9.9",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "rate-limiter-flexible": "^4.0.1",
