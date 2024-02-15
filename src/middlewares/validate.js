@@ -1,5 +1,5 @@
 const joi = require('joi');
-const ApiError = require('../utils/ApiError.JS');
+const ApiError = require('../utils/ApiError');
 
 const validate = (schema) => (req, res, next) => {
   const keys = Object.keys(schema);

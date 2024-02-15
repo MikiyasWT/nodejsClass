@@ -1,7 +1,7 @@
 const { RateLimiterMongo } = require('rate-limiter-flexible');
 const mongoose = require('mongoose');
 const httpStatus = require('http-status');
-const ApiError = require('../utils/ApiError.JS');
+const ApiError = require('../utils/ApiError');
 const config = require('../config/config');
 
 // const maxAttemptsPerDay = 100;

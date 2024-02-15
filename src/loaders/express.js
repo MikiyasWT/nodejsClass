@@ -8,7 +8,7 @@ const cors = require('cors');
 const blogRouter = require('../routes/blog.route');
 const authRouter = require('../routes/auth.route');
 const { errorHandler, errorConverter } = require('../middlewares/error');
-const ApiError = require('../utils/ApiError.JS');
+const ApiError = require('../utils/ApiError');
 const morgan = require('../config/morgan');
 const { jwtStrategy } = require('../config/passport');
 const {

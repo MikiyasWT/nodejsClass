@@ -9,7 +9,10 @@ const getBlogs = async (userId) => {
   return blogs;
 };
 
+const uploadFile = async () => {};
+
 module.exports = {
   createBlog,
   getBlogs,
+  uploadFile,
 };

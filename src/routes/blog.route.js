@@ -5,6 +5,7 @@ const { blogValidation } = require('../validations');
 const validate = require('../middlewares/validate');
 const { blogController } = require('../controller');
 const auth = require('../middlewares/auth');
+const upload = require('../utils/multer');
 
 router.get(
   '/blogs',
@@ -17,6 +18,13 @@ router.post(
   auth,
   validate(blogValidation.createBlogSchema),
   blogController.createBlog,
+);
+
+router.post(
+  '/blog/cover-image',
+  auth,
+  upload.single('coverImage'),
+  blogController.uploadFile,
 );
 
 module.exports = router;

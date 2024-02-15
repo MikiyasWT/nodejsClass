@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
 const { User } = require('../models');
-const ApiError = require('../utils/ApiError.JS');
+const ApiError = require('../utils/ApiError');
 const EventEmitter = require('../utils/EventEmitter');
 
 const registerUser = async (body) => {
