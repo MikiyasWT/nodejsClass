@@ -58,5 +58,6 @@ out/
 .eslintcache
 config/config.env
 config/config.env
+uploads
 
 

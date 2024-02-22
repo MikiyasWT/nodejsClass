@@ -19,13 +19,21 @@ const uploadFile = catchAsyncErrors(async (req, res) => {
   if (!req.file) {
     throw new ApiError(httpStatus.NOT_FOUND, 'File not found');
   }
-  res
-    .status(httpStatus.OK)
-    .send({ success: true, filePath: `/uploads/${req.file.filename}` });
+  const fileName = await blogService.uploadFile(req.file);
+  res.status(httpStatus.OK).json({ fileName });
+});
+
+const getFile = catchAsyncErrors(async (req, res) => {
+  const { filename } = req.params;
+  const stream = await blogService.getReadableFileStream(filename);
+  const contentType = `image/${filename.split('.')[1].toLowerCase()}`;
+  res.setHeader('Content-Type', contentType);
+  stream.pipe(res);
 });
 
 module.exports = {
   createBlog,
   getBlogs,
   uploadFile,
+  getFile,
 };

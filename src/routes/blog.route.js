@@ -27,4 +27,6 @@ router.post(
   blogController.uploadFile,
 );
 
+router.get('/blog/image/:filename', auth, blogController.getFile);
+
 module.exports = router;
