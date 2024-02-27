@@ -32,4 +32,8 @@ module.exports = {
     },
     reportOnly: true,
   },
+  redis: {
+    redisHost: envVars.REDIS_HOST,
+    redisPort: envVars.REDIS_PORT,
+  },
 };
