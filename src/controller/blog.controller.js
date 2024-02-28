@@ -2,7 +2,7 @@ const httpStatus = require('http-status');
 const { blogService } = require('../services');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const ApiError = require('../utils/ApiError');
-const ImageProcessorQueue = require('../background-tasks/queues/image-processor');
+const { ImageProcessor } = require('../background-tasks');
 const workers = require('../background-tasks/workers');
 
 const createBlog = catchAsyncErrors(async (req, res) => {
@@ -22,7 +22,7 @@ const uploadFile = catchAsyncErrors(async (req, res) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'File not found');
   }
   const fileName = `image-${Date.now()}.webp`;
-  await ImageProcessorQueue.add('ImageProcessorJob', {
+  await ImageProcessor.Queue.add('ImageProcessorJob', {
     file: req.file,
     fileName,
   });

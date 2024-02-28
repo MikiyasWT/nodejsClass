@@ -1,6 +1,7 @@
 const { Worker } = require('bullmq');
 const path = require('path');
 const config = require('../../config/config');
+const logger = require('../../config/logger');
 
 const start = async () => {
   // 1st parameter is the queue name
@@ -14,10 +15,14 @@ const start = async () => {
       host: config.redis.redisHost,
       port: config.redis.redisPort,
     },
+    // removeOnComplete:true,
+    concurrency: 3,
     autorun: true,
   });
 
-  ImageProcessorWorker.on('completed', (job) => `completed job ${job.id} `);
+  ImageProcessorWorker.on('completed', (job) =>
+    logger.info(`completed job ${job.id} `),
+  );
 };
 
 module.exports = { start };
