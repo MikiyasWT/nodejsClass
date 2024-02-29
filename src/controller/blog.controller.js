@@ -3,7 +3,6 @@ const { blogService } = require('../services');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const ApiError = require('../utils/ApiError');
 const { ImageProcessor } = require('../background-tasks');
-const workers = require('../background-tasks/workers');
 
 const createBlog = catchAsyncErrors(async (req, res) => {
   await blogService.createBlog(req.body, req.user.id);
@@ -26,7 +25,7 @@ const uploadFile = catchAsyncErrors(async (req, res) => {
     file: req.file,
     fileName,
   });
-  await workers.start();
+  await ImageProcessor.startWorker();
   res.status(httpStatus.OK).json({ fileName });
 });
 

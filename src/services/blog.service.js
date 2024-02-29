@@ -3,7 +3,7 @@ const fs = require('fs');
 const httpStatus = require('http-status');
 const { Blog } = require('../models');
 const ApiError = require('../utils/ApiError');
-const redisClient = require('../config/redis');
+const { CacheProcessor } = require('../background-tasks');
 
 const createBlog = async (body, userId) => {
   await Blog.create({ ...body, createdBy: userId });
@@ -15,8 +15,9 @@ const getRecentBlogs = async () => {
       createdAt: -1,
     })
     .limit(10);
-  // we have to use json stringify since redis storethe data as a string
-  await redisClient.set('recent-blogs', JSON.stringify(blogs));
+
+  await CacheProcessor.Queue.add('CacheJob', { blogs });
+  await CacheProcessor.startWorker();
   return blogs;
 };
 
