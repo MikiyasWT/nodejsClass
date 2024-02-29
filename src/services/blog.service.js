@@ -3,22 +3,22 @@ const fs = require('fs');
 const httpStatus = require('http-status');
 const { Blog } = require('../models');
 const ApiError = require('../utils/ApiError');
+const redisClient = require('../config/redis');
 
 const createBlog = async (body, userId) => {
   await Blog.create({ ...body, createdBy: userId });
 };
 
-const getBlogs = async (userId) => {
-  const blogs = await Blog.find({ createdBy: userId });
+const getRecentBlogs = async () => {
+  const blogs = await Blog.find()
+    .sort({
+      createdAt: -1,
+    })
+    .limit(10);
+  // we have to use json stringify since redis storethe data as a string
+  await redisClient.set('recent-blogs', JSON.stringify(blogs));
   return blogs;
 };
-
-// const uploadFile = async (file) => {
-//   const filename = `image-${Date.now()}.webp`;
-//   const outputPath = `${__dirname}/../../uploads/${filename}`;
-//   sharp(file.buffer).resize(600).webp({ quality: 80 }).toFile(outputPath);
-//   return filename;
-// };
 
 const getReadableFileStream = async (filename) => {
   const filePath = `${__dirname}/../../uploads/${filename}`;
@@ -30,7 +30,6 @@ const getReadableFileStream = async (filename) => {
 };
 module.exports = {
   createBlog,
-  getBlogs,
-  // uploadFile,
+  getRecentBlogs,
   getReadableFileStream,
 };

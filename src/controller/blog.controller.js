@@ -12,8 +12,8 @@ const createBlog = catchAsyncErrors(async (req, res) => {
     .send({ success: true, message: 'Blog created successfyly' });
 });
 
-const getBlogs = catchAsyncErrors(async (req, res) => {
-  const blogs = await blogService.getBlogs(req.body.userId);
+const getRecentBlogs = catchAsyncErrors(async (req, res) => {
+  const blogs = await blogService.getRecentBlogs();
   res.status(httpStatus.OK).json(blogs);
 });
 
@@ -40,7 +40,7 @@ const getFile = catchAsyncErrors(async (req, res) => {
 
 module.exports = {
   createBlog,
-  getBlogs,
+  getRecentBlogs,
   uploadFile,
   getFile,
 };
