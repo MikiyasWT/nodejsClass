@@ -25,7 +25,6 @@ const uploadFile = catchAsyncErrors(async (req, res) => {
     file: req.file,
     fileName,
   });
-  await ImageProcessor.startWorker();
   res.status(httpStatus.OK).json({ fileName });
 });
 
