@@ -9,7 +9,7 @@ const createWorker = require('../background-tasks/workers');
 
 const connectToRedis = async () => {
   try {
-    await redisClient.connect().then((client) => {
+    await redisClient.connect().then(async (client) => {
       if (client.error) {
         logger.error(
           `unable to connect to Redis Server, make sure to start it`,

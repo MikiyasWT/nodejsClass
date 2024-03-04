@@ -4,9 +4,11 @@ const httpStatus = require('http-status');
 const { Blog } = require('../models');
 const ApiError = require('../utils/ApiError');
 const { CacheProcessor } = require('../background-tasks');
+const redisClient = require('../config/redis');
 
 const createBlog = async (body, userId) => {
   await Blog.create({ ...body, createdBy: userId });
+  await redisClient.del('recent-blogs');
 };
 
 const getRecentBlogs = async () => {
