@@ -1,11 +1,16 @@
 const { Queue } = require('bullmq');
 const config = require('../../config/config');
 
-const CacheProcessorQueue = new Queue('Cache', {
-  connection: {
-    host: config.redis.host,
-    port: config.redis.port,
-  },
-});
+function createQueue(name) {
+  return new Queue(name, {
+    connection: {
+      host: config.redis.host,
+      port: config.redis.port,
+    },
+  });
+}
 
-module.exports = CacheProcessorQueue;
+const CacheProcessorQueue = createQueue('Cache');
+const CacheInvalidatorQueue = createQueue('InvalidCache');
+
+module.exports = { CacheProcessorQueue, CacheInvalidatorQueue };

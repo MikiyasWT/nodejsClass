@@ -3,23 +3,28 @@ const fs = require('fs');
 const httpStatus = require('http-status');
 const { Blog } = require('../models');
 const ApiError = require('../utils/ApiError');
-const { CacheProcessor } = require('../background-tasks');
-const redisClient = require('../config/redis');
+const { CacheProcessor, CacheInvalidator } = require('../background-tasks');
 
 const createBlog = async (body, userId) => {
-  await Blog.create({ ...body, createdBy: userId });
-  await redisClient.del('recent-blogs');
+  const newBlog = await Blog.create({ ...body, createdBy: userId });
+  await CacheInvalidator.Queue.add('InvalidCache', {
+    key: 'recent-blogs',
+    blog: newBlog,
+  });
 };
 
 const getRecentBlogs = async () => {
-  const blogs = await Blog.find()
-    .sort({
-      createdAt: -1,
-    })
-    .limit(10);
-
-  await CacheProcessor.Queue.add('CacheJob', { blogs });
-  return blogs;
+  try {
+    const blogs = await Blog.find()
+      .sort({
+        createdAt: -1,
+      })
+      .limit(10);
+    await CacheProcessor.Queue.add('CacheJob', { blogs });
+    return blogs;
+  } catch (error) {
+    throw new Error('Error while caching blogs');
+  }
 };
 
 const getReadableFileStream = async (filename) => {

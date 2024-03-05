@@ -48,6 +48,7 @@ module.exports = async (app) => {
   const workers = [
     { name: 'ImageProcessor', filename: 'image-processor.js' },
     { name: 'Cache', filename: 'cache-processor.js' },
+    { name: 'InvalidCache', filename: 'cache-invalidator.js' },
   ];
 
   workers.forEach(async (worker) => {

@@ -1,5 +1,8 @@
 const ImageProcessorQueue = require('./queues/image-processor');
-const CacheProcessorQueue = require('./queues/cache-processor');
+const {
+  CacheProcessorQueue,
+  CacheInvalidatorQueue,
+} = require('./queues/cache-processor');
 
 module.exports = {
   ImageProcessor: {
@@ -7,5 +10,8 @@ module.exports = {
   },
   CacheProcessor: {
     Queue: CacheProcessorQueue,
+  },
+  CacheInvalidator: {
+    Queue: CacheInvalidatorQueue,
   },
 };
