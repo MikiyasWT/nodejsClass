@@ -29,6 +29,10 @@ const blogSchema = mongoose.Schema({
     required: true,
   },
   comment: [commentSchema],
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 blogSchema.plugin(toJson);
