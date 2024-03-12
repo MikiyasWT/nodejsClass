@@ -16,6 +16,12 @@ const getRecentBlogs = catchAsyncErrors(async (req, res) => {
   res.status(httpStatus.OK).json(blogs);
 });
 
+const searchBlog = catchAsyncErrors(async (req, res) => {
+  const { searchQuery } = req.query;
+  const blogs = await blogService.getSearchedBlog(searchQuery);
+  res.json({ blogs });
+});
+
 const uploadFile = catchAsyncErrors(async (req, res) => {
   if (!req.file) {
     throw new ApiError(httpStatus.NOT_FOUND, 'File not found');
@@ -39,6 +45,7 @@ const getFile = catchAsyncErrors(async (req, res) => {
 module.exports = {
   createBlog,
   getRecentBlogs,
+  searchBlog,
   uploadFile,
   getFile,
 };

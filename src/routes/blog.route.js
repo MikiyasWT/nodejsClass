@@ -9,6 +9,7 @@ const upload = require('../utils/multer');
 const recentBlogsCache = require('../middlewares/cache/recent-blogs');
 
 router.get('/blogs', auth, recentBlogsCache, blogController.getRecentBlogs);
+router.get('/blogs/search', auth, blogController.searchBlog);
 router.post(
   '/blog',
   auth,

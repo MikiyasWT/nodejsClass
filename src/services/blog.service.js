@@ -4,6 +4,7 @@ const httpStatus = require('http-status');
 const { Blog } = require('../models');
 const ApiError = require('../utils/ApiError');
 const { CacheProcessor, CacheInvalidator } = require('../background-tasks');
+const logger = require('../config/logger');
 
 const createBlog = async (body, userId) => {
   const newBlog = await Blog.create({ ...body, createdBy: userId });
@@ -28,9 +29,23 @@ const getRecentBlogs = async () => {
   }
 };
 
+const getSearchedBlog = async (searchQuery) => {
+  try {
+    const blogs = await Blog.find({ $text: { $search: searchQuery } })
+      .sort({
+        createdAt: -1,
+      })
+      .lean({ getters: true });
+    return blogs;
+  } catch (error) {
+    throw new Error('Error while caching blogs');
+  }
+};
+
 const getReadableFileStream = async (filename) => {
   const filePath = `${__dirname}/../../uploads/${filename}`;
   if (!fs.existsSync(filePath)) {
+    logger.error('File not found');
     throw new ApiError(httpStatus.NOT_FOUND, 'File not found');
   }
   const stream = fs.createReadStream(filePath);
@@ -39,5 +54,6 @@ const getReadableFileStream = async (filename) => {
 module.exports = {
   createBlog,
   getRecentBlogs,
+  getSearchedBlog,
   getReadableFileStream,
 };

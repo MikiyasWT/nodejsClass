@@ -43,6 +43,8 @@ const blogSchema = mongoose.Schema(
   { toJSON: { getters: true } },
 );
 
+blogSchema.index({ title: 'text', description: 'text' });
+
 blogSchema.plugin(toJson);
 blogSchema.plugin(mongooseLeanGetters);
 const Blog = mongoose.model('Blog', blogSchema);
