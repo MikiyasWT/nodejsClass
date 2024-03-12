@@ -19,7 +19,8 @@ const getRecentBlogs = async () => {
       .sort({
         createdAt: -1,
       })
-      .limit(2);
+      .limit(7)
+      .lean({ getters: true });
     await CacheProcessor.Queue.add('CacheJob', { blogs });
     return blogs;
   } catch (error) {
